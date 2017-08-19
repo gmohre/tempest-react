@@ -42,13 +42,13 @@ class Level extends React.Component {
 		levelInfo.adjacents[this.state.angles.length] = null;
 	  	
 
-	  	for (var i = 0; i < this.state.angles.length; i++) {
+		for (var i = 0; i < this.state.angles.length; i++) {
 	    // Store current position.
-	    	levelInfo.coords[i] = [levelInfo.x, levelInfo.y];
-	    	levelInfo.xmin = Math.min(levelInfo.x, levelInfo.xmin);
-	    	levelInfo.xmax = Math.max(levelInfo.x, levelInfo.xmax);
-    		levelInfo.ymin = Math.min(levelInfo.y, levelInfo.ymin);
-    		levelInfo.ymax = Math.max(levelInfo.y, levelInfo.ymax);
+		    levelInfo.coords[i] = [levelInfo.x, levelInfo.y];
+		    levelInfo.xmin = Math.min(levelInfo.x, levelInfo.xmin);
+		    levelInfo.xmax = Math.max(levelInfo.x, levelInfo.xmax);
+	    	levelInfo.ymin = Math.min(levelInfo.y, levelInfo.ymin);
+	    	levelInfo.ymax = Math.max(levelInfo.y, levelInfo.ymax);
 
 		    // Iterate around the grid.
 		    levelInfo.angle += this.state.angles[i];
