@@ -23,38 +23,46 @@ C.flyInStart = 2 * C.depth;
 C.flyInAdvance = 8;
 
 class LevelCoordinates extends React.Component{
-	constructor(info){
-		console.log(info);
+	constructor(angles){
 		super();
-
-		var coordsArray = [][info.angles.length-1] = null;
-		var adjacentsArray = [][info.angles.length] = null;
-
-		this.state = { 
-			coords: coordsArray, adjacents: adjacentsArray, angle: 0,
-		    x: 0, y: 0, radians: null,// State.
-		    xmin: 0, xmax: 0, ymin: 0, ymax: 0 
-		};
-
-		for (var i = 0; i < info.angles.length; i++) {
+		var coordsArray = [][angles.length-1] = null;
+		var adjacentsArray = [][angles.length] = null;		
+		this.state = {
+			coords : coordsArray,
+			adjacents : adjacentsArray,
+			angles : angles
+		}
+	}
+	componentDidMount()
+	{
+		var coordsArray = this.state.coords;
+		var adjacentsArray = this.state.adjacents;
+		var x = 0, y = 0, xmin = 0, ymin = 0, angle = 0, radians = null, xmax = 0, ymax = 0;
+		for (var i = 0; i < this.state.angles.length; i++) {
 	    // Store current position.
-			this.coords[i] = [this.x, this.y];
-			this.xmin = Math.min(this.x, this.xmin);
-			this.xmax = Math.max(this.x, this.xmax);
-			this.ymin = Math.min(this.y, this.ymin);
-			this.ymax = Math.max(this.y, this.ymax);
+			coordsArray[i] = [x, y];
+			xmin = Math.min(x, xmin);
+			xmax = Math.max(x, xmax);
+			ymin = Math.min(y, ymin);
+			ymax = Math.max(y, ymax);
 
 			// Iterate around the grid.
-			this.angle += info.angles[i];
+			angle += this.state.angles[i];
 			// Normalize the angle.
-			while (this.angle < 0) { this.angle += 360; }
-				this.angle %= 360;
+			while (angle < 0) { angle += 360; }
+				angle %= 360;
 
 			// Calculate the coordinates.
-			this.radians = this.angle * C.radPerDeg;
-			this.x += Math.cos(this.radians); this.y -= Math.sin(this.radians);
-			this.adjacents[i] = [this.angle, null];
+			radians = angle * C.radPerDeg;
+			x += Math.cos(radians); y -= Math.sin(radians);
+			adjacentsArray[i] = [angle, null] 
 		}
+
+		this.setState({adjacentsArray : adjacentsArray, coordsArray: coordsArray});
+	}
+	
+	render(){
+		return <div>{this.state.adjacentsArray}</div>
 	}
 
 }
@@ -121,12 +129,13 @@ class LevelCanvas extends React.Component {
 	}*/
 
 	render() {
-	return (
-			<div className='gameView'>
-			<LevelCoordinates angles={this.state.angles}/>
-			</div>
-			)
+		return (
+				<div className='gameView'>
+				<LevelCoordinates angles={this.state.angles}/>
+				</div>
+				)
 	}
+
 		/*
 		return React.createElement('div', {className:'main'},
 				[
@@ -150,6 +159,6 @@ I.wraps = true;
 I.twist = [0, 45];
 console.log(I);
 ReactDOM.render(
-  <LevelCanvas info={I}/>,
+  <LevelCanvas info={I} />,
   document.getElementById('root')
 );
