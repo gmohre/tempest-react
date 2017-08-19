@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+//var ReactPIXI = require('react-pixi');
+//var PIXI = require('pixi.js');
+
 
 var C = {}
 C.radPerDeg = Math.PI / 180;
@@ -19,48 +22,56 @@ C.flyInStart = 2 * C.depth;
 // The Z-distance to advance the grid per frame.
 C.flyInAdvance = 8;
 
-class Level extends React.Component {
-	constructor(info) {
+class LevelCoordinates extends React.Component{
+	constructor(info){
+		console.log(info);
 		super();
-		this.state = {
-			coords: [],
-			wraps: true, 
-			twist: [0,45],
-			angles: [165, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21 ]
-		};
-		
-  		this.twist = [this.state.twist[0] * C.gridTwistFactor, this.state.twist[1] * C.gridTwistFactor];
-  		 
-		var levelInfo = {
-		 	coords: [], adjacents: [], angle: 0,
+
+		var coordsArray = [][info.angles.length-1] = null;
+		var adjacentsArray = [][info.angles.length] = null;
+
+		this.state = { 
+			coords: coordsArray, adjacents: adjacentsArray, angle: 0,
 		    x: 0, y: 0, radians: null,// State.
-		    xmin: 0, xmax: 0, ymin: 0, ymax: 0
-		}; 
+		    xmin: 0, xmax: 0, ymin: 0, ymax: 0 
+		};
 
-		// Initialize array sizes.
-		levelInfo.coords[this.state.angles.length-1]  = null;
-		levelInfo.adjacents[this.state.angles.length] = null;
-	  	
-
-		for (var i = 0; i < this.state.angles.length; i++) {
+		for (var i = 0; i < info.angles.length; i++) {
 	    // Store current position.
-			levelInfo.coords[i] = [levelInfo.x, levelInfo.y];
-			levelInfo.xmin = Math.min(levelInfo.x, levelInfo.xmin);
-			levelInfo.xmax = Math.max(levelInfo.x, levelInfo.xmax);
-			levelInfo.ymin = Math.min(levelInfo.y, levelInfo.ymin);
-			levelInfo.ymax = Math.max(levelInfo.y, levelInfo.ymax);
+			this.coords[i] = [this.x, this.y];
+			this.xmin = Math.min(this.x, this.xmin);
+			this.xmax = Math.max(this.x, this.xmax);
+			this.ymin = Math.min(this.y, this.ymin);
+			this.ymax = Math.max(this.y, this.ymax);
 
 			// Iterate around the grid.
-			levelInfo.angle += this.state.angles[i];
+			this.angle += info.angles[i];
 			// Normalize the angle.
-			while (levelInfo.angle < 0) { levelInfo.angle += 360; }
-				levelInfo.angle %= 360;
+			while (this.angle < 0) { this.angle += 360; }
+				this.angle %= 360;
 
 			// Calculate the coordinates.
-			levelInfo.radians = levelInfo.angle * C.radPerDeg;
-			levelInfo.x += Math.cos(levelInfo.radians); levelInfo.y -= Math.sin(levelInfo.radians);
-			levelInfo.adjacents[i] = [levelInfo.angle, null];
+			this.radians = this.angle * C.radPerDeg;
+			this.x += Math.cos(this.radians); this.y -= Math.sin(this.radians);
+			this.adjacents[i] = [this.angle, null];
 		}
+	}
+
+}
+
+class LevelCanvas extends React.Component {
+	constructor(info) {
+		super();
+		this.state = {	
+			coords: [],
+			wraps: info.wraps, 
+			twist: [info.twist],
+			angles: info.angles,
+			level: null
+		};
+	}
+	/*		
+		//rendering helper
 		if (this.state.wraps) {
 		    // -1 signifies a closing segment, used in #draw
 		    levelInfo.coords[i] = levelInfo.coords[0].concat([-1]);
@@ -106,29 +117,39 @@ class Level extends React.Component {
 		this.scoords = [];
 		this.scoords[this.coords.length - 1] = null; // Initialize array size.
 		//this.setDistance(0);
+	
+	}*/
+
+	render() {
+	return (
+			<div className='gameView'>
+			<LevelCoordinates angles={this.state.angles}/>
+			</div>
+			)
 	}
-
-	render(){
-		/*var style = 'rgb('+this.color[0]+','+this.color[1]+','+this.color[2]+')';
-		c.fillStyle = style;
-		c.strokeStyle = style;
-		c.lineWidth = 0.01;
-
-		c.globalAlpha = 0.03 * this.alphaFactor;
-		c.beginPath();
-		this.drawArea();
-		c.fill();
-
-		c.globalAlpha = this.alphaFactor;
-		c.beginPath();
-		this.drawLanes();
-		c.stroke();
-		// Assumption: the original +globalAlpha+ was already +alphaFactor+
-		*/
-		return (<div class="coords">{this.coords}</div>);
-	}
+		/*
+		return React.createElement('div', {className:'main'},
+				[
+					React.createElement(
+					'div',
+					{className:'coords'},
+					null,
+					this.coords),
+					React.createElement(
+					'div',
+					{className:'scoords'},
+					null,
+					this.scoords)
+				]
+		);*/
+	
 }
+var I = {}
+I.angles = [165, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21];
+I.wraps = true; 
+I.twist = [0, 45];
+console.log(I);
 ReactDOM.render(
-  <Level />,
+  <LevelCanvas info={I}/>,
   document.getElementById('root')
 );

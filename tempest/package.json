@@ -13,8 +13,10 @@
     "react-scripts": "0.4.1"
   },
   "dependencies": {
+    "pixi.js": "^4.5.4",
     "react": "^15.3.1",
-    "react-dom": "^15.3.1"
+    "react-dom": "^15.3.1",
+    "react-pixi": "^0.9.14"
   },
   "scripts": {
     "start": "react-scripts start",
