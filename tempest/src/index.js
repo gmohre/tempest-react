@@ -44,22 +44,22 @@ class Level extends React.Component {
 
 		for (var i = 0; i < this.state.angles.length; i++) {
 	    // Store current position.
-		    levelInfo.coords[i] = [levelInfo.x, levelInfo.y];
-		    levelInfo.xmin = Math.min(levelInfo.x, levelInfo.xmin);
-		    levelInfo.xmax = Math.max(levelInfo.x, levelInfo.xmax);
+			levelInfo.coords[i] = [levelInfo.x, levelInfo.y];
+			levelInfo.xmin = Math.min(levelInfo.x, levelInfo.xmin);
+			levelInfo.xmax = Math.max(levelInfo.x, levelInfo.xmax);
 			levelInfo.ymin = Math.min(levelInfo.y, levelInfo.ymin);
 			levelInfo.ymax = Math.max(levelInfo.y, levelInfo.ymax);
 
-		    // Iterate around the grid.
-		    levelInfo.angle += this.state.angles[i];
-		    // Normalize the angle.
-		    while (levelInfo.angle < 0) { levelInfo.angle += 360; }
-		    	levelInfo.angle %= 360;
-		    
-		    // Calculate the coordinates.
-		    levelInfo.radians = levelInfo.angle * C.radPerDeg;
-		    levelInfo.x += Math.cos(levelInfo.radians); levelInfo.y -= Math.sin(levelInfo.radians);
-		    levelInfo.adjacents[i] = [levelInfo.angle, null];
+			// Iterate around the grid.
+			levelInfo.angle += this.state.angles[i];
+			// Normalize the angle.
+			while (levelInfo.angle < 0) { levelInfo.angle += 360; }
+				levelInfo.angle %= 360;
+
+			// Calculate the coordinates.
+			levelInfo.radians = levelInfo.angle * C.radPerDeg;
+			levelInfo.x += Math.cos(levelInfo.radians); levelInfo.y -= Math.sin(levelInfo.radians);
+			levelInfo.adjacents[i] = [levelInfo.angle, null];
 		}
 		if (this.state.wraps) {
 		    // -1 signifies a closing segment, used in #draw
