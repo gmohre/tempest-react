@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//var ReactPIXI = require('react-pixi');
-//var PIXI = require('pixi.js');
+var ReactPIXI = require('react-pixi');
+var PIXI = require('pixi.js');
 
 
 var C = {}
@@ -23,61 +23,121 @@ C.flyInStart = 2 * C.depth;
 C.flyInAdvance = 8;
 
 class LevelCoordinates extends React.Component{
-	constructor(angles){
-		super();
-		var coordsArray = [][angles.length-1] = null;
-		var adjacentsArray = [][angles.length] = null;		
+	constructor(props){
+		super(props);
 		this.state = {
-			coords : coordsArray,
-			adjacents : adjacentsArray,
-			angles : angles
-		}
+			coords : [],
+			adjacents : [],
+			angles : props.angles
+		}		
 	}
-	componentDidMount()
-	{
-		var coordsArray = this.state.coords;
-		var adjacentsArray = this.state.adjacents;
+	componentDidMount(){
+		var coordsArray = [];
+		var adjacentsArray = [];
 		var x = 0, y = 0, xmin = 0, ymin = 0, angle = 0, radians = null, xmax = 0, ymax = 0;
+		
 		for (var i = 0; i < this.state.angles.length; i++) {
-	    // Store current position.
+	    	// Store current position.
 			coordsArray[i] = [x, y];
 			xmin = Math.min(x, xmin);
 			xmax = Math.max(x, xmax);
 			ymin = Math.min(y, ymin);
 			ymax = Math.max(y, ymax);
-
+			
 			// Iterate around the grid.
 			angle += this.state.angles[i];
 			// Normalize the angle.
 			while (angle < 0) { angle += 360; }
 				angle %= 360;
-
 			// Calculate the coordinates.
 			radians = angle * C.radPerDeg;
 			x += Math.cos(radians); y -= Math.sin(radians);
 			adjacentsArray[i] = [angle, null] 
 		}
 
+		if (this.state.wraps) {
+		    // -1 signifies a closing segment, used in #draw
+		    coordsArray[i] = coordsArray[0].concat([-1]);
+		    adjacentsArray[i] = adjacentsArray[0];
+  		}
+  		else {
+	    	coordsArray[i] = [x, y];
+	    	adjacentsArray[i] = [null, null];
+	    	xmin = Math.min(x, xmin); xmax = Math.max(x, xmax);
+			ymin = Math.min(y, ymin); ymax = Math.max(y, ymax);
+		}
+		
+		for (i = 0; i < adjacentsArray.length; i++) {
+	    	var previous = (i !== 0) ? i - 1 : adjacentsArray.length - 1;
+	    	adjacentsArray[i][1] = (180 + adjacentsArray[previous][0]) % 360;
+	  	}
 		this.setState({adjacentsArray : adjacentsArray, coordsArray: coordsArray});
 	}
-	
 	render(){
-		return <div>{this.state.adjacentsArray}</div>
+		return (
+			<div classname="arrays">
+			<ul><li className="adjacentsArray">{this.state.adjacentsArray}</li>
+			<li classname="coordsArray">{this.state.coordsArray}</li>
+			</ul>
+			</div>);
 	}
 
 }
 
 class LevelCanvas extends React.Component {
-	constructor(info) {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {	
 			coords: [],
-			wraps: info.wraps, 
-			twist: [info.twist],
-			angles: info.angles,
-			level: null
+			wraps: props.info.wraps, 
+			twist: props.info.twist,
+			angles: props.info.angles,
 		};
 	}
+	render() {
+		
+		return (
+				<div>
+				BIG JABRONI
+				<ul>
+				<li>{this.state.angles}</li>
+				</ul>
+				<LevelCoordinates angles={this.state.angles}/>
+				</div>
+				);
+		
+	}
+}
+
+
+var I = {}
+I.angles = [165, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21];
+I.wraps = true; 
+I.twist = [0, 45];
+const element = <LevelCanvas info={I} />;
+ReactDOM.render(
+  element,
+  document.getElementById('root')
+);
+
+var Stage = ReactPIXI.Stage;
+var Text = ReactPIXI.Text;
+
+const ExampleStage = React.createClass({
+  displayName: 'ExampleStage',
+  render: function() {
+    var fontstyle = {font:'40px Times'};
+    return <Stage width={this.props.width} height={this.props.height}>
+      <Text text="Vector text" x={this.props.xposition} y={10} style={fontstyle} anchor={new PIXI.Point(0.5,0)} key="2" />
+    </Stage>;
+  }
+});
+
+ReactDOM.render(
+  ExampleStage,
+  document.getElementById('pixistage')
+);
+
 	/*		
 		//rendering helper
 		if (this.state.wraps) {
@@ -128,13 +188,6 @@ class LevelCanvas extends React.Component {
 	
 	}*/
 
-	render() {
-		return (
-				<div className='gameView'>
-				<LevelCoordinates angles={this.state.angles}/>
-				</div>
-				)
-	}
 
 		/*
 		return React.createElement('div', {className:'main'},
@@ -152,13 +205,3 @@ class LevelCanvas extends React.Component {
 				]
 		);*/
 	
-}
-var I = {}
-I.angles = [165, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21];
-I.wraps = true; 
-I.twist = [0, 45];
-console.log(I);
-ReactDOM.render(
-  <LevelCanvas info={I} />,
-  document.getElementById('root')
-);

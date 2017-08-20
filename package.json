@@ -10,7 +10,8 @@
   "author": "Glenn Mohre <glenn.mohre@gmail.com>",
   "contributors": [],
   "devDependencies": {
-    "react-scripts": "0.4.1"
+    "react-scripts": "0.4.1",
+    "url":"0.11.0"
   },
   "dependencies": {
     "pixi.js": "^4.5.4",
