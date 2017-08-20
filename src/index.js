@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-var ReactPIXI = require('react-pixi');
-var PIXI = require('pixi.js');
+//var ReactPIXI = require('react-pixi');
+//var PIXI = require('pixi.js');
 
 
 var C = {}
