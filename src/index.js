@@ -24,18 +24,18 @@ C.flyInAdvance = 8;
 
 class LevelCoordinates extends React.Component{
 	constructor(props){
-		super(props);
+			super(props);
 		this.state = {
 			coords : [],
 			adjacents : [],
 			angles : props.angles
-		}		
+		}
 	}
 	componentDidMount(){
 		var coordsArray = [];
 		var adjacentsArray = [];
 		var x = 0, y = 0, xmin = 0, ymin = 0, angle = 0, radians = null, xmax = 0, ymax = 0;
-		
+
 		for (var i = 0; i < this.state.angles.length; i++) {
 	    	// Store current position.
 			coordsArray[i] = [x, y];
@@ -43,7 +43,7 @@ class LevelCoordinates extends React.Component{
 			xmax = Math.max(x, xmax);
 			ymin = Math.min(y, ymin);
 			ymax = Math.max(y, ymax);
-			
+
 			// Iterate around the grid.
 			angle += this.state.angles[i];
 			// Normalize the angle.
@@ -52,7 +52,7 @@ class LevelCoordinates extends React.Component{
 			// Calculate the coordinates.
 			radians = angle * C.radPerDeg;
 			x += Math.cos(radians); y -= Math.sin(radians);
-			adjacentsArray[i] = [angle, null] 
+			adjacentsArray[i] = [angle, null]
 		}
 
 		if (this.state.wraps) {
@@ -64,9 +64,9 @@ class LevelCoordinates extends React.Component{
 	    	coordsArray[i] = [x, y];
 	    	adjacentsArray[i] = [null, null];
 	    	xmin = Math.min(x, xmin); xmax = Math.max(x, xmax);
-			ymin = Math.min(y, ymin); ymax = Math.max(y, ymax);
+				ymin = Math.min(y, ymin); ymax = Math.max(y, ymax);
 		}
-		
+
 		for (i = 0; i < adjacentsArray.length; i++) {
 	    	var previous = (i !== 0) ? i - 1 : adjacentsArray.length - 1;
 	    	adjacentsArray[i][1] = (180 + adjacentsArray[previous][0]) % 360;
@@ -87,32 +87,27 @@ class LevelCoordinates extends React.Component{
 class LevelCanvas extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {	
+		this.state = {
 			coords: [],
-			wraps: props.info.wraps, 
+			wraps: props.info.wraps,
 			twist: props.info.twist,
 			angles: props.info.angles,
 		};
 	}
 	render() {
-		
+
 		return (
 				<div>
-				BIG JABRONI
-				<ul>
-				<li>{this.state.angles}</li>
-				</ul>
 				<LevelCoordinates angles={this.state.angles}/>
 				</div>
 				);
-		
 	}
 }
 
 
 var I = {}
 I.angles = [165, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21, -27, -21, -21, -21];
-I.wraps = true; 
+I.wraps = true;
 I.twist = [0, 45];
 const element = <LevelCanvas info={I} />;
 ReactDOM.render(
@@ -138,7 +133,7 @@ ReactDOM.render(
   document.getElementById('pixistage')
 );
 */
-	/*		
+	/*
 		//rendering helper
 		if (this.state.wraps) {
 		    // -1 signifies a closing segment, used in #draw
@@ -185,7 +180,7 @@ ReactDOM.render(
 		this.scoords = [];
 		this.scoords[this.coords.length - 1] = null; // Initialize array size.
 		//this.setDistance(0);
-	
+
 	}*/
 
 
@@ -204,4 +199,3 @@ ReactDOM.render(
 					this.scoords)
 				]
 		);*/
-	
