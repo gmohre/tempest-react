@@ -75,9 +75,9 @@ class LevelCoordinates extends React.Component{
 	}
 	render(){
 		return (
-			<div classname="arrays">
+			<div className="arrays">
 			<ul><li className="adjacentsArray">{this.state.adjacentsArray}</li>
-			<li classname="coordsArray">{this.state.coordsArray}</li>
+			<li className="coordsArray">{this.state.coordsArray}</li>
 			</ul>
 			</div>);
 	}
@@ -119,7 +119,7 @@ ReactDOM.render(
   element,
   document.getElementById('root')
 );
-
+/*
 var Stage = ReactPIXI.Stage;
 var Text = ReactPIXI.Text;
 
@@ -128,7 +128,7 @@ const ExampleStage = React.createClass({
   render: function() {
     var fontstyle = {font:'40px Times'};
     return <Stage width={this.props.width} height={this.props.height}>
-      <Text text="Vector text" x={this.props.xposition} y={10} style={fontstyle} anchor={new PIXI.Point(0.5,0)} key="2" />
+      <Text text="Vector text" x={this.props.xposition} y={10} style={fontstyle} anchor={new PIXI.Point(0.5,0)} key="1" />
     </Stage>;
   }
 });
@@ -137,7 +137,7 @@ ReactDOM.render(
   ExampleStage,
   document.getElementById('pixistage')
 );
-
+*/
 	/*		
 		//rendering helper
 		if (this.state.wraps) {
